@@ -14,10 +14,14 @@ public class HouseMyBehavior : MonoBehaviour
     public Transform Bear1CatchPosition;
     public Transform Bear2CatchPosition;
     public Transform tv;
+    public Transform Bear3Approach;
+    public Transform RomanticRunaway;
+    public Transform RomanticRunaway2;
     [Space]
     [Header("Actors")]
     public GameObject Bear1;
     public GameObject Bear2;
+    public GameObject Bear3;
     [Space]
     [Header("Sound")]
     public AudioSource knock;
@@ -54,7 +58,8 @@ public class HouseMyBehavior : MonoBehaviour
         return new DecoratorLoop(
                         new Sequence(
                         WatchingTvArc(),
-                        PlayingCatchArc()
+                        PlayingCatchArc(),
+                        Bear3EntranceArc()
                         ));
        
     }
@@ -98,49 +103,58 @@ public class HouseMyBehavior : MonoBehaviour
         
        // return new Sequence(new LeafWait(1000));
     }
-    protected Node TvSelector()
+   /* protected Node TvSelector()
     {
         return new Selector(
             Friendship(),
             Loneliness()
             );
-    }
+    }*/
     protected Node Loneliness()
     {
         
         Val<Vector3> position3 = Val.V(() => tv.position);
+        Val<bool> act = true;
         return new Sequence(
-            LonelinessCheck(),
+            Check2(),
             new LeafInvoke(() => print("got to loneliness")),
             LonelinessReturn(),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
             new LeafInvoke(()=> Bear1.GetComponent<CharacterMecanim>().SitDown()),
             new LeafInvoke(() => lecture.Play()),
-            Bear2.GetComponent<BehaviorMecanim>().Node_BodyAnimation("H_CowBoy", true),
+            Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("SATNIGHTFEVER", act),
             new LeafWait(1000000)
             );
         //waiting a 1000 seconds is an ending 
     }
     protected Node Friendship()
     {
-        
-        // Debug.Log("made it to friendship");
-        return new Sequence(
-            FriendshipCheck(),
-            new LeafInvoke(() => print("got to friendship")),
-            WalkToPositions(),
-            new LeafWait(1000));
-    }
-    protected Node WalkToPositions()
-    {
         Val<Vector3> position = Val.V(() => Bear1CatchPosition.position);
         Val<Vector3> position2 = Val.V(() => Bear2CatchPosition.position);
-        // return new SequenceParallel(
+        Val<Vector3> position3 = Val.V(() => outsideDoor.position);
+        // Debug.Log("made it to friendship");
         return new Sequence(
-          Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
-            Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2)
-            );
+            Check1(),
+            new LeafInvoke(() => print("got to friendship")),
+            //new SequenceParallel(
+            Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
+            Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position3),
+            Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+            //),
+            //WalkToPositions(),
+            new LeafWait(1000));
     }
+    /*protected Node WalkToPositions()
+    {
+       
+         return new Sequence(
+        //return new Sequence(
+            new SequenceParallel(
+            Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+            Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2)
+            )
+            );
+    }*/
     protected Node LonelinessReturn()
     {
         Val<Vector3> position = Val.V(() => Bear2ByeBye.position);
@@ -151,23 +165,76 @@ public class HouseMyBehavior : MonoBehaviour
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2)
             );
     }
-    protected Node LonelinessCheck()
-    {
-        return new LeafAssert(() => UserInput == 2
-        );
-    }
-    protected Node FriendshipCheck()
-    {
-        return new LeafAssert(() => UserInput == 1
-        );
-    }
     #endregion
     #region PlayingCatchArc
     protected Node PlayingCatchArc()
     {
+        Val<Vector3> position = Val.V(() => Bear1.transform.position);
+        Val<Vector3> position2 = Val.V(() => Bear2.transform.position);
+        Val<bool> act = true;
         return new Sequence(
-            new LeafInvoke(()=> print("made it to Catch Arc")),
+            new LeafInvoke(() => print("made it to Catch Arc")),
+            Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position2),
+            Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position),
+            new SequenceParallel(
+                Bear2.GetComponent<BehaviorMecanim>().Node_FaceAnimation("FIREBREATH", act),
+                Bear1.GetComponent<BehaviorMecanim>().Node_FaceAnimation("LOOKAWAY", act)
+                ),
             new LeafWait(1000)
+            );
+    }
+    #endregion
+    #region Bear3EntranceArc
+    protected Node Bear3EntranceArc()
+    {
+        Val<Vector3> position = Val.V(() => Bear3Approach.position);
+        Val<bool> act = true;
+       // Func<bool> shouldact = (true);
+        return new Sequence(
+            Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+            Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
+            GiveOptions()
+
+            );
+    }
+    protected Node GiveOptions()
+    {
+        return new Sequence(
+            new LeafInvoke(() => Text.GetComponent<Text>().text = "Do you want to (1)continue hanging out with your homie or(2)run off with bear3"),
+            new LeafInvoke(() => Text.SetActive(true)),
+            GetUserInput(),
+            new Selector(
+                ChooseHomie(),
+                ChooseRomanticInterest()
+                )
+            );
+    }
+    protected Node ChooseHomie()
+    {
+        Val<Vector3> position = Val.V(() => RomanticRunaway.position);
+        Val<bool> act = true;
+        return new Sequence(
+            Check1(),
+            new LeafInvoke(()=> print("made it to choose homie")),
+            Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+            Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("CRY", act),
+            new LeafWait(100000)
+            );
+    }
+    protected Node ChooseRomanticInterest()
+    {
+        Val<Vector3> position = Val.V(() => RomanticRunaway.position);
+        Val<Vector3> position2 = Val.V(() => RomanticRunaway2.position);
+        Val<bool> act = true;
+        return new Sequence(
+            Check2(),
+            new LeafInvoke(() => print("made it to choose Romantic Interest")),
+            new SequenceParallel(
+                Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+                Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
+                Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("CRY", act)
+                ),
+            new LeafWait(100000)
             );
     }
     #endregion
@@ -209,7 +276,16 @@ public class HouseMyBehavior : MonoBehaviour
            )
          );
     }
-
+    protected Node Check2()
+    {
+        return new LeafAssert(() => UserInput == 2
+        );
+    }
+    protected Node Check1()
+    {
+        return new LeafAssert(() => UserInput == 1
+        );
+    }
     #endregion
 
     #region Affordances
