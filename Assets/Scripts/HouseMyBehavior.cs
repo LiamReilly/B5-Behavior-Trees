@@ -72,13 +72,17 @@ public class HouseMyBehavior : MonoBehaviour
             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             new LeafInvoke(() => knock.Play()),
             new LeafWait(1000),
-            new LeafInvoke(() => Bear1.GetComponent<CharacterMecanim>().StandUp()),
+            //new LeafInvoke(() => Bear1.GetComponent<CharacterMecanim>().StandUp()),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position4),
             Bear2.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
             OfferChoice(),
             new LeafInvoke(() => { Text.SetActive(false); }),
-            TvSelector()
+            new LeafInvoke(() => print("got to before selector")),
+            new Selector(
+                Friendship(),
+                Loneliness()
+                )
             );
     }
     protected Node OfferChoice()
@@ -88,7 +92,7 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             new LeafInvoke(() => Text.GetComponent<Text>().text = "Do you want to (1)play catch or (2)go back to watching Kappadia's Lecture"),
             new LeafInvoke(() => Text.SetActive(true)),
-            GetUserInput(1000)
+            GetUserInput()
             );
             
         
@@ -97,14 +101,14 @@ public class HouseMyBehavior : MonoBehaviour
     protected Node TvSelector()
     {
         return new Selector(
-            Loneliness(),
-            Friendship()
+            Friendship(),
+            Loneliness()
             );
     }
     protected Node Loneliness()
     {
         
-        Debug.Log(UserInput);
+        //Debug.Log(UserInput);
         Val<Vector3> position3 = Val.V(() => tv.position);
         return new Sequence(
             LonelinessCheck(),
@@ -124,6 +128,7 @@ public class HouseMyBehavior : MonoBehaviour
         //Debug.Log(UserInput);
         return new Sequence(
             FriendshipCheck(),
+            new LeafInvoke(() => print("got to friendship")),
             WalkToPositions(),
             new LeafWait(1000));
     }
@@ -131,8 +136,9 @@ public class HouseMyBehavior : MonoBehaviour
     {
         Val<Vector3> position = Val.V(() => Bear1CatchPosition.position);
         Val<Vector3> position2 = Val.V(() => Bear2CatchPosition.position);
-        return new SequenceParallel(
-            Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+        // return new SequenceParallel(
+        return new Sequence(
+          Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2)
             );
     }
@@ -140,8 +146,9 @@ public class HouseMyBehavior : MonoBehaviour
     {
         Val<Vector3> position = Val.V(() => Bear2ByeBye.position);
         Val<Vector3> position2 = Val.V(() => Couch.position);
-        return new SequenceParallel(
-            Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position),
+        // return new SequenceParallel(
+        return new Sequence(
+             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2)
             );
     }
@@ -168,7 +175,7 @@ public class HouseMyBehavior : MonoBehaviour
     #endregion
 
     #region UserInput
-    protected Node GetUserInput(int time)
+    protected Node GetUserInput()
     {
         return new SequenceParallel(
             new DecoratorInvert(
