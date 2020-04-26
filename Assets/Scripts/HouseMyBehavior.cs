@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class HouseMyBehavior : MonoBehaviour
 {
     [Header("Destinations")]
-    public Transform door;
     public Transform Couch;
     public Transform Bear2ByeBye;
     public Transform insideDoor;
+    public Transform outsideDoor;
     public Transform Bear1CatchPosition;
     public Transform Bear2CatchPosition;
     public Transform tv;
@@ -62,7 +62,7 @@ public class HouseMyBehavior : MonoBehaviour
     #region TVArc
     protected Node WatchingTvArc()
     {
-        Val<Vector3> position = Val.V(() => door.position);
+        Val<Vector3> position = Val.V(() => outsideDoor.position);
         Val<Vector3> position2 = Val.V(() => insideDoor.position);
         Val<Vector3> position3 = Val.V(() => Bear1.transform.position);
         Val<Vector3> position4 = Val.V(() => Bear2.transform.position);
@@ -121,9 +121,10 @@ public class HouseMyBehavior : MonoBehaviour
     protected Node Friendship()
     {
         
-        //Debug.Log(UserInput);
+        Debug.Log("made it to friendship");
         return new Sequence(
             FriendshipCheck(),
+            new LeafInvoke(() => print("going to catch balls")),
             WalkToPositions(),
             new LeafWait(1000));
     }
@@ -207,5 +208,9 @@ public class HouseMyBehavior : MonoBehaviour
 
     #region Affordances
     //add this shit later boys
+    protected Node OpenDoor(GameObject knob){
+        return null;
+    }
+
     #endregion
 }
