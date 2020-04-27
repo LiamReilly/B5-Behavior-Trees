@@ -229,11 +229,11 @@
     <Compile Include="Assets\Core\Scripts\Util\Token.cs" />
     <Compile Include="Assets\Core\Scripts\Util\Tuple.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
-    <Compile Include="Assets\Scripts\DecoratorLoopUntil.cs" />
     <Compile Include="Assets\Scripts\HouseMyBehavior.cs" />
     <Compile Include="Assets\Scripts\IKBT.cs" />
     <Compile Include="Assets\Scripts\MyBehaviorTree.cs" />
     <Compile Include="Assets\Scripts\MyBehaviorTree2.cs" />
+    <Compile Include="Assets\Scripts\WaitFor.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/sammy/Documents/College/2019-2020/CS 443 - Animation/B5-Behavior-Trees/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
