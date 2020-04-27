@@ -216,7 +216,7 @@ public class HouseMyBehavior : MonoBehaviour
        // Func<bool> shouldact = (true);
         return new Sequence(
             Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
-            Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
+            seduce(Bear3, Bear2),
             Dialogue("Bear1&2: Hey Bear3!"),
             Dialogue("Bear3: Hey bear 1, I think Bear2 would do nothing but hold you back at the dance competition."),
             Dialogue("Bear2: You think you can just waltz up here and steal my partner"),
@@ -339,7 +339,7 @@ public class HouseMyBehavior : MonoBehaviour
         );
     }
 
-protected Node CloseDoor(Animator anim)
+    protected Node CloseDoor(Animator anim)
     {
         return new Sequence(
             new Sequence(
@@ -362,6 +362,17 @@ protected Node CloseDoor(Animator anim)
             );
     }
 
+    protected Node seduce(GameObject newdude, GameObject jipped)
+    {
+
+        return new Sequence(
+            jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", true),
+            newdude.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", true),
+            new LeafWait(10000),
+            jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", false)
+
+        );
+    }
 
     #endregion
 }
