@@ -230,6 +230,7 @@ public class HouseMyBehavior : MonoBehaviour
             Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
             Bear1.GetComponent<BehaviorMecanim>().Node_HandAnimation("ROAR", notact),
             Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("FIREBREATH", notact),
+            seduce(Bear3, Bear2),
             Dialogue("Bear1&2: Hey Bear3!"),
             Bear1.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
             Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
@@ -364,7 +365,7 @@ public class HouseMyBehavior : MonoBehaviour
         );
     }
 
-protected Node CloseDoor(Animator anim)
+    protected Node CloseDoor(Animator anim)
     {
         return new Sequence(
             new Sequence(
@@ -387,6 +388,17 @@ protected Node CloseDoor(Animator anim)
             );
     }
 
+    protected Node seduce(GameObject newdude, GameObject jipped)
+    {
+
+        return new Sequence(
+            jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", true),
+            newdude.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", true),
+            new LeafWait(10000),
+            jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", false)
+
+        );
+    }
 
     #endregion
 }
