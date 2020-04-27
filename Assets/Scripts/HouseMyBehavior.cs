@@ -278,38 +278,29 @@ public class HouseMyBehavior : MonoBehaviour
     #region UserInput
     protected Node GetUserInput()
     {
-        // return new SequenceParallel(
-        return new Sequence(
-            new DecoratorInvert(
-                new DecoratorLoop(
-                    new LeafInvoke(() =>
-                    {
-                        var uinput = -1;
-                        if (Input.GetKey("1"))
-                        {
-                            uinput = 1;
-                        }
-                        if (Input.GetKey("2"))
-                        {
-                            uinput = 2;
-                        }
-                        if (uinput == 1 || uinput == 2)
-                        {
-                            UserInput = uinput;
-                            print(UserInput);
-                            return RunStatus.Failure;
-                        }
-                        else
-                        {
-                            return RunStatus.Running;
-                        }
-                    }
-
-                    )
-                )
-            
-           )
-         );
+        return new DecoratorLoopUntil(
+            new LeafInvoke(() =>
+            {
+                var uinput = -1;
+                if (Input.GetKey("1"))
+                {
+                    uinput = 1;
+                }
+                if (Input.GetKey("2"))
+                {
+                    uinput = 2;
+                }
+                if (uinput == 1 || uinput == 2)
+                {
+                    UserInput = uinput;
+                    return RunStatus.Success;
+                }
+                else
+                {
+                    return RunStatus.Running;
+                }
+            })
+        );
     }
     protected Node Check2()
     {
