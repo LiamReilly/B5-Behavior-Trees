@@ -30,6 +30,7 @@ public class HouseMyBehavior : MonoBehaviour
     [Header("Other")]
     public int UserInput;
     public GameObject Text;
+    public GameObject DialogueText;
     
 
 
@@ -44,6 +45,7 @@ public class HouseMyBehavior : MonoBehaviour
         Text.SetActive(false);
         knock = GetComponent<AudioSource>();
         lecture = transform.GetChild(0).GetComponent<AudioSource>();
+        DialogueText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -73,7 +75,7 @@ public class HouseMyBehavior : MonoBehaviour
         Val<Vector3> position4 = Val.V(() => Bear2.transform.position);
         //Val<Vector3> position5 = Val.V(() => tv.position);
         return new Sequence(
-            
+            Dialogue("Bear1: I'd better practice for the dance competition after this lecture. Especially if I want to win the grand prize."),
             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             new LeafInvoke(() => knock.Play()),
             new LeafWait(1000),
@@ -81,6 +83,7 @@ public class HouseMyBehavior : MonoBehaviour
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position4),
             Bear2.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
+            Dialogue("Bear2: Want to come outside and play catch with me?"),
             OfferChoice(),
             new LeafInvoke(() => { Text.SetActive(false); }),
             new LeafInvoke(() => print("got to before selector")),
@@ -118,10 +121,13 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             Check2(),
             new LeafInvoke(() => print("got to loneliness")),
+            Dialogue("Bear1: Sorry this lecture on behavior trees is too important to miss."),
             LonelinessReturn(),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
             new LeafInvoke(()=> Bear1.GetComponent<CharacterMecanim>().SitDown()),
             new LeafInvoke(() => lecture.Play()),
+            Dialogue("Bear2: I might as well just head to the competition now and try to find a partner there."),
+            Dialogue("Bear2: That shouldn't be too hard with moves like these!"),
             Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("SATNIGHTFEVER", act),
             new LeafWait(1000000)
             );
@@ -137,6 +143,7 @@ public class HouseMyBehavior : MonoBehaviour
             Check1(),
             new LeafInvoke(() => print("got to friendship")),
             //new SequenceParallel(
+            Dialogue("Bear2: Sure I can always just watch the recording of the lecture later."),
             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position3),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
@@ -176,6 +183,8 @@ public class HouseMyBehavior : MonoBehaviour
             new LeafInvoke(() => print("made it to Catch Arc")),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position),
+            Dialogue("Bear2: Finally, I've been itching to practice all day, the dance competition can wait."),
+            Dialogue("Bear1: True that brother!"),
             new SequenceParallel(
                 Bear2.GetComponent<BehaviorMecanim>().Node_FaceAnimation("FIREBREATH", act),
                 Bear1.GetComponent<BehaviorMecanim>().Node_FaceAnimation("LOOKAWAY", act)
@@ -193,6 +202,11 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
+            Dialogue("Bear1&2: Hey Bear3!"),
+            Dialogue("Bear3: Hey bear 1, I think Bear2 would do nothing but hold you back at the dance competition."),
+            Dialogue("Bear2: You think you can just waltz up here and steal my partner"),
+            Dialogue("Bear3: Someone who would make that joke doesn't deserve a partner!"),
+            Dialogue("Bear2: You're not going to side with Bear3, are you?"),
             GiveOptions()
 
             );
@@ -216,6 +230,8 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             Check1(),
             new LeafInvoke(()=> print("made it to choose homie")),
+            Dialogue("Bear1: Of course not, we're ride or die brother."),
+            Dialogue("Bear2: You know it."),
             Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("CRY", act),
             new LeafWait(100000)
@@ -229,11 +245,15 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             Check2(),
             new LeafInvoke(() => print("made it to choose Romantic Interest")),
+            Dialogue("Bear1: Sorry bruh, I know we go back, but this grand prize is just too important to me."),
+            Dialogue("Bear2: I hope it was more important than our friendship."),
             new SequenceParallel(
                 Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
                 Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
                 Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("CRY", act)
                 ),
+            Dialogue("Bear3: You made the right decision."),
+            Dialogue("Bear1: I sure hope so."),
             new LeafWait(100000)
             );
     }
@@ -292,6 +312,15 @@ public class HouseMyBehavior : MonoBehaviour
     //add this shit later boys
     protected Node OpenDoor(GameObject knob){
         return null;
+    }
+    protected Node Dialogue(string speech)
+    {
+        return new Sequence(
+            new LeafInvoke(() => DialogueText.GetComponent<Text>().text = speech),
+            new LeafInvoke(() => DialogueText.SetActive(true)),
+            new LeafWait(5000),
+            new LeafInvoke(() => DialogueText.SetActive(false))
+            );
     }
 
     #endregion
