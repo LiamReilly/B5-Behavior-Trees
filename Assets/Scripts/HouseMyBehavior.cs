@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TreeSharpPlus;
 using UnityEngine.UI;
+using RootMotion.FinalIK;
 
 public class HouseMyBehavior : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class HouseMyBehavior : MonoBehaviour
     [Header("Actors")]
     public GameObject Bear1;
     public GameObject Bear2;
+    public GameObject Door;
+    public GameObject DoorKnob;
     [Space]
     [Header("Sound")]
     public AudioSource knock;
@@ -26,6 +29,11 @@ public class HouseMyBehavior : MonoBehaviour
     [Header("Other")]
     public int UserInput;
     public GameObject Text;
+    [Space]
+    [Header("IK Stuff")]
+    public FullBodyBipedEffector hand;
+    public InteractionObject doorIO;
+    public Animator doorAnim; 
     
 
 
@@ -40,6 +48,9 @@ public class HouseMyBehavior : MonoBehaviour
         Text.SetActive(false);
         knock = GetComponent<AudioSource>();
         lecture = transform.GetChild(0).GetComponent<AudioSource>();
+        // doorIO = Door.GetComponent<InteractionObject>();
+        // print(doorIO.GetTarget(hand, "").ToString());
+        // doorAnim = Door.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -76,6 +87,7 @@ public class HouseMyBehavior : MonoBehaviour
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position4),
             Bear2.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
+            OpenDoor(),
             OfferChoice(),
             new LeafInvoke(() => { Text.SetActive(false); }),
             new LeafInvoke(() => print("got to before selector")),
@@ -112,6 +124,7 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             LonelinessCheck(),
             new LeafInvoke(() => print("got to loneliness")),
+            CloseDoor(),
             LonelinessReturn(),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
             new LeafInvoke(()=> Bear1.GetComponent<CharacterMecanim>().SitDown()),
@@ -214,9 +227,34 @@ public class HouseMyBehavior : MonoBehaviour
 
     #region Affordances
     //add this shit later boys
-    protected Node OpenDoor(GameObject knob){
-        return null;
+    protected Node OpenDoor()
+    {
+        return new Sequence(
+            new SequenceParallel(
+                new LeafInvoke(() =>
+                {
+                    doorAnim.SetTrigger("OpenDoor");
+                })
+                // }),
+                // Bear1.GetComponent<BehaviorMecanim>().Node_StartInteraction(hand, doorIO)
+            )
+        );
     }
+
+protected Node CloseDoor()
+    {
+        return new Sequence(
+            new SequenceParallel(
+                new LeafInvoke(() =>
+                {
+                    doorAnim.SetTrigger("CloseDoor");
+                })
+            )
+            // ),
+            // Bear1.GetComponent<BehaviorMecanim>().Node_StopInteraction(hand)
+        );
+    }
+
 
     #endregion
 }
