@@ -222,22 +222,27 @@ public class HouseMyBehavior : MonoBehaviour
     protected Node Bear3EntranceArc()
     {
         Val<Vector3> position = Val.V(() => Bear3Approach.position);
+        Val<Vector3> position2 = Val.V(() => Bear1.transform.position);
         Val<bool> act = true;
-        Val<bool> notact = false;
+        //Val<bool> notact = false;
         // Func<bool> shouldact = (true);
         return new Sequence(
             Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
-            Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
-            Bear1.GetComponent<BehaviorMecanim>().Node_HandAnimation("ROAR", notact),
-            Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("FIREBREATH", notact),
+            //Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
+            Bear1.GetComponent<BehaviorMecanim>().Node_FaceAnimation("ROAR", false),
+            Bear2.GetComponent<BehaviorMecanim>().Node_FaceAnimation("FIREBREATH", false),
+            Bear3.GetComponent<BehaviorMecanim>().Node_OrientTowards(position2),
             seduce(Bear3, Bear2),
+            Bear3.GetComponent<BehaviorMecanim>().Node_OrientTowards(position2),
             Dialogue("Bear1&2: Hey Bear3!"),
             Bear1.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
             Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", act),
             new LeafWait(500),
-            Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", notact),
+            Bear1.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", false),
+            Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", false),
+            Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", false),
             Dialogue("Bear3: Hey bear 1, I think Bear2 would do nothing but hold you back at the dance competition."),
-            Dialogue("Bear2: You think you can just waltz up here and steal my partner"),
+            Dialogue("Bear2: You think you can just waltz up here and steal my partner?"),
             Dialogue("Bear3: Someone who would make that joke doesn't deserve a partner!"),
             Dialogue("Bear2: You're not going to side with Bear3, are you?"),
             GiveOptions()
@@ -383,10 +388,13 @@ public class HouseMyBehavior : MonoBehaviour
     {
 
         return new Sequence(
-            jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", true),
             newdude.GetComponent<BehaviorMecanim>().Node_HandAnimation("WAVE", true),
-            new LeafWait(10000),
+            new LeafWait(3000),
+            //jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("STAYAWAY", true),
+            jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", true),
+            new LeafWait(3000),
             jipped.GetComponent<BehaviorMecanim>().Node_HandAnimation("SURPRISED", false)
+            //newdude.GetComponent<BehaviorMecanim>().Node_HandAnimation("BEINGCOCKY", true)
 
         );
     }
