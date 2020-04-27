@@ -94,7 +94,7 @@ public class HouseMyBehavior : MonoBehaviour
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position4),
             Bear2.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
-            OpenDoor(doorAnim),
+            OpenDoor(doorAnim, Bear1),
             Dialogue("Bear2: Want to come outside and play catch with me?"),
             OfferChoice(),
             new LeafInvoke(() => { Text.SetActive(false); }),
@@ -133,7 +133,7 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             Check2(),
             new LeafInvoke(() => print("got to loneliness")),
-            CloseDoor(doorAnim),
+            CloseDoor(doorAnim, Bear1),
             Dialogue("Bear1: Sorry this lecture on behavior trees is too important to miss."),
             LonelinessReturn(),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
@@ -159,7 +159,7 @@ public class HouseMyBehavior : MonoBehaviour
             Dialogue("Bear2: Sure I can always just watch the recording of the lecture later."),
             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position3),
-            CloseDoor(doorAnim),
+            CloseDoor(doorAnim, Bear1),
             new LeafWait(667),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             //),
@@ -325,33 +325,34 @@ public class HouseMyBehavior : MonoBehaviour
 
     #region Affordances
     //add this shit later boys
-    protected Node OpenDoor(Animator anim)
+    protected Node OpenDoor(Animator anim, GameObject p)
     {
         return new Sequence(
-            new Sequence(
-                new LeafInvoke(() =>
-                {
-                    anim.SetTrigger("OpenDoor");
-                })
-                // }),
-                // Bear1.GetComponent<BehaviorMecanim>().Node_StartInteraction(hand, doorIO)
-            )
+            p.GetComponent<BehaviorMecanim>().Node_StartInteraction(hand, doorIO),
+            new LeafWait(100),
+            new LeafInvoke(() =>
+            {
+                anim.SetTrigger("OpenDoor");
+            }),
+            new LeafWait(800),
+            p.GetComponent<BehaviorMecanim>().Node_StopInteraction(hand)
         );
     }
 
-    protected Node CloseDoor(Animator anim)
+    protected Node CloseDoor(Animator anim, GameObject p)
     {
         return new Sequence(
-            new Sequence(
-                new LeafInvoke(() =>
-                {
-                    anim.SetTrigger("CloseDoor");
-                })
-            )
-            // ),
-            // Bear1.GetComponent<BehaviorMecanim>().Node_StopInteraction(hand)
+            p.GetComponent<BehaviorMecanim>().Node_StartInteraction(hand, doorIO),
+            new LeafWait(100),
+            new LeafInvoke(() =>
+            {
+                anim.SetTrigger("CloseDoor");
+            }),
+            new LeafWait(800),
+            p.GetComponent<BehaviorMecanim>().Node_StopInteraction(hand)
         );
     }
+    
     protected Node Dialogue(string speech)
     {
         return new Sequence(
