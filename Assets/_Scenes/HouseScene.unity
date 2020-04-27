@@ -120,9 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 3c2a0373a754337458d44e1af3d6ebfb, type: 2}
---- !u!114 &65085589 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4852090670931931743, guid: 8e0c45150f5ce0a44bb535c9b4e50eaa,
 --- !u!1 &58349434
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,16 +150,16 @@ Transform:
   m_Father: {fileID: 1375649864}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &65085587 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 4385f8ee1ef2d1145a5ec0d7ce2f526c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4852090670900531914}
+--- !u!114 &65085589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8296172667539050682}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41f425a4a83914b04af3f1642c000f5d, type: 3}
+  m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &176925050
@@ -2810,7 +2807,7 @@ MonoBehaviour:
   UserInput: 0
   Text: {fileID: 932852948}
   hand: 5
-  doorIO: {fileID: 65085589}
+  doorIO: {fileID: 8296172667539050684}
   doorAnim: {fileID: 8296172667539050683}
   DialogueText: {fileID: 1522065776}
 --- !u!114 &1832257352
@@ -3614,3 +3611,15 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 4852090670900531914}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8296172667539050684 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4852090670931931743, guid: 8e0c45150f5ce0a44bb535c9b4e50eaa,
+    type: 3}
+  m_PrefabInstance: {fileID: 4852090670900531914}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296172667539050682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41f425a4a83914b04af3f1642c000f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

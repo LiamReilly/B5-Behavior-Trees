@@ -94,7 +94,7 @@ public class HouseMyBehavior : MonoBehaviour
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position4),
             Bear2.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
-            OpenDoor(),
+            OpenDoor(doorAnim),
             Dialogue("Bear2: Want to come outside and play catch with me?"),
             OfferChoice(),
             new LeafInvoke(() => { Text.SetActive(false); }),
@@ -133,7 +133,7 @@ public class HouseMyBehavior : MonoBehaviour
         return new Sequence(
             Check2(),
             new LeafInvoke(() => print("got to loneliness")),
-            CloseDoor(),
+            CloseDoor(doorAnim),
             Dialogue("Bear1: Sorry this lecture on behavior trees is too important to miss."),
             LonelinessReturn(),
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position3),
@@ -159,6 +159,8 @@ public class HouseMyBehavior : MonoBehaviour
             Dialogue("Bear2: Sure I can always just watch the recording of the lecture later."),
             Bear2.GetComponent<BehaviorMecanim>().Node_GoTo(position2),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position3),
+            CloseDoor(doorAnim),
+            new LeafWait(667),
             Bear1.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             //),
             //WalkToPositions(),
@@ -198,10 +200,10 @@ public class HouseMyBehavior : MonoBehaviour
             Bear1.GetComponent<BehaviorMecanim>().Node_OrientTowards(position),
             Dialogue("Bear2: Finally, I've been itching to practice all day, the dance competition can wait."),
             Dialogue("Bear1: True that brother!"),
-            new SequenceParallel(
-                Bear2.GetComponent<BehaviorMecanim>().Node_FaceAnimation("FIREBREATH", act),
-                Bear1.GetComponent<BehaviorMecanim>().Node_FaceAnimation("LOOKAWAY", act)
-                ),
+            // new SequenceParallel(
+            //     Bear2.GetComponent<BehaviorMecanim>().Node_FaceAnimation("FIREBREATH", act),
+            //     Bear1.GetComponent<BehaviorMecanim>().Node_FaceAnimation("LOOKAWAY", act)
+            //     ),
             new LeafWait(1000)
             );
     }
@@ -323,13 +325,13 @@ public class HouseMyBehavior : MonoBehaviour
 
     #region Affordances
     //add this shit later boys
-    protected Node OpenDoor()
+    protected Node OpenDoor(Animator anim)
     {
         return new Sequence(
-            new SequenceParallel(
+            new Sequence(
                 new LeafInvoke(() =>
                 {
-                    doorAnim.SetTrigger("OpenDoor");
+                    anim.SetTrigger("OpenDoor");
                 })
                 // }),
                 // Bear1.GetComponent<BehaviorMecanim>().Node_StartInteraction(hand, doorIO)
@@ -337,13 +339,13 @@ public class HouseMyBehavior : MonoBehaviour
         );
     }
 
-protected Node CloseDoor()
+protected Node CloseDoor(Animator anim)
     {
         return new Sequence(
-            new SequenceParallel(
+            new Sequence(
                 new LeafInvoke(() =>
                 {
-                    doorAnim.SetTrigger("CloseDoor");
+                    anim.SetTrigger("CloseDoor");
                 })
             )
             // ),
