@@ -227,6 +227,7 @@
      <Compile Include="Assets\Scripts\IKTestScript.cs" />
      <Compile Include="Assets\Scripts\MyBehaviorTree.cs" />
      <Compile Include="Assets\Scripts\MyBehaviorTree2.cs" />
+     <Compile Include="Assets\Scripts\WaitFor.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/aaron/Programming/Unity/B5-Behavior-Trees/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

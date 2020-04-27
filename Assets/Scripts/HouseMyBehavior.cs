@@ -144,6 +144,7 @@ public class HouseMyBehavior : MonoBehaviour
             Dialogue("Bear2: I might as well just head to the competition now and try to find a partner there."),
             Dialogue("Bear2: That shouldn't be too hard with moves like these!"),
             Bear2.GetComponent<BehaviorMecanim>().Node_HandAnimation("SATNIGHTFEVER", act),
+            Dialogue("You got the Loneliness Ending!"),
             new LeafWait(1000000)
             );
         //waiting a 1000 seconds is an ending 
@@ -273,6 +274,7 @@ public class HouseMyBehavior : MonoBehaviour
             Dialogue("Bear2: You know it."),
             Bear3.GetComponent<BehaviorMecanim>().Node_GoTo(position),
             Bear3.GetComponent<BehaviorMecanim>().Node_HandAnimation("CRY", act),
+            Dialogue("You got the Homie Ending!"),
             new LeafWait(100000)
             );
     }
@@ -300,6 +302,7 @@ public class HouseMyBehavior : MonoBehaviour
                 ),
             Dialogue("Bear3: You made the right decision."),
             Dialogue("Bear1: I sure hope so."),
+            Dialogue("You got the Betrayal Ending!"),
             new LeafWait(100000)
             );
     }

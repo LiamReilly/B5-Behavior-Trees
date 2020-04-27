@@ -52,10 +52,10 @@ public class IKTestScript : MonoBehaviour
     protected Node TestArc()
     {
         return new Sequence(
-
-            OpenDoor(doorAnim, Bear1),
+            
+            PickUp(Bear1),
             new LeafWait(1000),
-            CloseDoor(doorAnim, Bear1),
+            PutDown(Bear1),
             new LeafWait(1000)
         );
     }
