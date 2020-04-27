@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TreeSharpPlus;
 
-public class DecoratorLoopUntil : Decorator
+public class WaitFor : Decorator
 {
-    public DecoratorLoopUntil(Node child)
+    public WaitFor(Node child)
             : base(child)
     {
     }

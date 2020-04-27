@@ -278,7 +278,7 @@ public class HouseMyBehavior : MonoBehaviour
     #region UserInput
     protected Node GetUserInput()
     {
-        return new DecoratorLoopUntil(
+        return new WaitFor(
             new LeafInvoke(() =>
             {
                 var uinput = -1;
